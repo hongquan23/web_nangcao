@@ -21,5 +21,5 @@ MSV : 23010423
 - ⚙️ **Framework**: Laravel 11+
 - 🗃️ **Cơ sở dữ liệu**: MySQL 
 - 🔐 **Xác thực**: Laravel Breeze 
-- 🎨 **Giao diện**: Blade + Tailwind CSS (hoặc Livewire nếu mở rộng)
+- 🎨 **Giao diện**: Blade + Tailwind CSS 
 - 🌐 **REST API**: Laravel Resource + Controller

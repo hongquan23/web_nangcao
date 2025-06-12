@@ -20,7 +20,7 @@ COPY . .
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer install --no-dev --optimize-autoloader
 
-# ✅ 6. Đặt mirror npm trước khi cài để tránh lỗi 503
+# ✅ 6. Đặt mirror npm và build frontend (Vite)
 RUN npm config set registry https://registry.npmmirror.com \
     && npm install \
     && npm run build
@@ -32,8 +32,8 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /e
 RUN mkdir -p storage/framework/{sessions,views,cache} bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-# 9. Tạo .env và key (nếu chưa có)
-RUN cp .env.example .env || true \
+# ✅ 9. Tạo .env từ biến môi trường nếu chưa có
+RUN [ ! -f .env ] && printenv | grep -v "no_proxy" > .env || true \
     && php artisan config:cache \
     && php artisan key:generate || true
 

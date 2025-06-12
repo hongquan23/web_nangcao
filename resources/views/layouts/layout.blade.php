@@ -51,6 +51,8 @@
         nav .nav-links {
             display: flex;
             gap: 1.25rem;
+            align-items: center;
+            position: relative;
         }
 
         nav .nav-links a,
@@ -66,8 +68,60 @@
         nav form.logout-button button { color: #dc2626; }
         nav form.logout-button button:hover { color: #b91c1c; }
 
+        /* User dropdown styles */
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+
+        .user-menu button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .user-menu button:hover {
+            color: #2563eb;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 110%;
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            min-width: 150px;
+            z-index: 100;
+        }
+
+        .user-dropdown form button {
+            width: 100%;
+            padding: 10px 15px;
+            background: none;
+            border: none;
+            text-align: left;
+            cursor: pointer;
+            font-weight: 500;
+            color: #dc2626;
+            border-radius: 0 0 6px 6px;
+        }
+
+        .user-dropdown form button:hover {
+            background-color: #fee2e2;
+            color: #b91c1c;
+        }
+
         main {
-            flex: 1; /* Đảm bảo phần main chiếm toàn bộ phần trống còn lại */
+            flex: 1;
             max-width: 720px;
             margin: 2.5rem auto 4rem;
             padding: 2rem;
@@ -84,62 +138,6 @@
             background-color: rgba(255,255,255,0.88);
         }
 
-        .flashcard-set {
-            background: linear-gradient(to top left, #f9fafb, #f3f4f6);
-            border-left: 6px solid #6366f1;
-            border-radius: 16px;
-            padding: 1.75rem 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-        }
-
-        .flashcard-set:hover {
-            border-left-color: #4f46e5;
-            box-shadow: 0 8px 30px rgba(99, 102, 241, 0.25);
-        }
-
-        .flashcard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .flashcard-title {
-            font-size: 1.35rem;
-            font-weight: 700;
-            color: #111827;
-        }
-
-        .flashcard-actions {
-            display: flex;
-            gap: 1.25rem;
-            font-size: 0.92rem;
-            font-weight: 500;
-        }
-
-        .flashcard-actions a,
-        .flashcard-actions button {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: inherit;
-            text-decoration: none;
-            transition: transform 0.2s ease;
-        }
-
-        .flashcard-actions a:hover,
-        .flashcard-actions button:hover {
-            transform: scale(1.05);
-        }
-
-        .view { color: #2563eb; }
-        .edit { color: #ca8a04; }
-        .delete { color: #dc2626; }
-
         @media (max-width: 768px) {
             nav .container { flex-direction: column; gap: 0.8rem; text-align: center; }
             nav .nav-links { flex-direction: column; }
@@ -151,15 +149,23 @@
 
 <nav>
     <div class="container">
-        <a href="{{ route('dashboard') }}" class="logo">📘 Flashcard App</a>
+        <a href="{{ route('sets.index') }}" class="logo">📘 Flashcard App</a>
         <div class="nav-links">
             @auth
                 <a href="{{ route('sets.index') }}">📁 Bộ thẻ</a>
                 <a href="{{ route('profile.edit') }}">👤 Hồ sơ</a>
-                <form action="{{ route('logout') }}" method="POST" class="logout-button">
-                    @csrf
-                    <button type="submit">🚪 Đăng xuất</button>
-                </form>
+
+                <div class="user-menu">
+                    <button id="userMenuButton" type="button" aria-haspopup="true" aria-expanded="false">
+                        {{ Auth::user()->name }} ▼
+                    </button>
+                    <div id="userDropdown" class="user-dropdown" role="menu" aria-labelledby="userMenuButton">
+                        <form action="{{ route('logout') }}" method="POST" role="none">
+                            @csrf
+                            <button type="submit" role="menuitem">🚪 Đăng xuất</button>
+                        </form>
+                    </div>
+                </div>
             @else
                 <a href="{{ route('login') }}">🔐 Đăng nhập</a>
                 <a href="{{ route('register') }}" style="color:#16a34a;">📝 Đăng ký</a>
@@ -175,6 +181,32 @@
 <footer>
     &copy; {{ date('Y') }} <strong>Flashcard App</strong>. All rights reserved.
 </footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('userMenuButton');
+        const dropdown = document.getElementById('userDropdown');
+
+        if (btn) {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const isExpanded = btn.getAttribute('aria-expanded') === 'true';
+                btn.setAttribute('aria-expanded', String(!isExpanded));
+                if (dropdown.style.display === 'block') {
+                    dropdown.style.display = 'none';
+                } else {
+                    dropdown.style.display = 'block';
+                }
+            });
+
+            // Ẩn dropdown khi click ngoài
+            document.addEventListener('click', function() {
+                dropdown.style.display = 'none';
+                btn.setAttribute('aria-expanded', 'false');
+            });
+        }
+    });
+</script>
 
 </body>
 </html>

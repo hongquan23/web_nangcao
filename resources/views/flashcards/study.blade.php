@@ -130,8 +130,8 @@
     @php
         $flashcardsArray = $flashcards->map(function($f) {
             return [
-                'term' => $f->term,
-                'definition' => $f->definition,
+                'term' => $f->definition,
+                'definition' => $f->term,
             ];
         })->toArray();
     @endphp

@@ -110,7 +110,8 @@ blade template Cart
 
 ## Routes
 
-![image](https://github.com/user-attachments/assets/769f7edc-006b-4e7c-a57f-5982aae4c548)
+![image](https://github.com/user-attachments/assets/5ccb5951-4148-468c-8835-ce8f92c61bb1)
+
 
 # Security Setup
 

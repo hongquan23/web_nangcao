@@ -72,7 +72,11 @@ Authentication/Authorisation
 ## Controller
 #### ProfileController:
 
-![image](https://github.com/user-attachments/assets/fe334819-2c33-49b3-8c58-f0544bacfd1b)
+![image](https://github.com/user-attachments/assets/4f606d33-2a4d-493d-8772-635fa17a9ad6)
+
+![image](https://github.com/user-attachments/assets/6a36bf62-8656-4ac1-a94e-6bba425c0500)
+
+
 
 #### FlashcardController:
 
@@ -112,9 +116,9 @@ blade template Cart
 
 # Link
 
-## Github Profile : https://github.com/MhLogn
+## Github Profile : 
 
-## Link Demo : https://www.youtube.com/@longhamanh5118
+## Link Demo : 
 
 ## Public Web (deployment) link: 
 
@@ -122,79 +126,50 @@ blade template Cart
 
 ## Trang xác thực người dùng:
 
-![Screenshot 2025-06-10 232649](https://github.com/user-attachments/assets/99d4ec65-f64a-466f-8b40-9b781c1cd101)
 
 ### Trang đăng nhập:
 
-![image](https://github.com/user-attachments/assets/f480b218-c588-4e6e-9710-9d5bccd4c2ce)
+![image](https://github.com/user-attachments/assets/31750b70-cf0f-4ca8-ae99-6c3de0123f4f)
+
 
 ### Trang đăng ký:
 
-![image](https://github.com/user-attachments/assets/9ab20a38-fef6-48f3-b783-96217ef28da4)
+![image](https://github.com/user-attachments/assets/8eb62c33-9e3f-403c-bb0f-6d4fc17feed2)
+
 
 ### Trang quên mật khẩu: 
 
-![image](https://github.com/user-attachments/assets/8938c6ed-3eb2-4861-9e27-6cd3cfaa28da)
+![image](https://github.com/user-attachments/assets/5c25cde8-23ec-432c-9b65-eea20a57e1e1)
+
 
 ## Trang chủ:
 
-![image](https://github.com/user-attachments/assets/5d1af8c4-aee5-4c6c-922c-41e6535d04e0)
-![image](https://github.com/user-attachments/assets/d4dc6a12-af96-4f04-9a24-97370a6df363)
+![image](https://github.com/user-attachments/assets/3435ff27-a37a-49ae-8fbb-e973e3466db6)
 
-## Trang sản phẩm:
+![image](https://github.com/user-attachments/assets/b196b148-c8a3-4a93-8ac2-f57d2cae3bbb)
 
-### Danh sách:
+## Học Flashcard:
 
-![image](https://github.com/user-attachments/assets/fb9b0b13-9311-4411-9e2c-c85c321bacd1)
+### Trang chính:
 
-### Xem chi tiết:
-
-![image](https://github.com/user-attachments/assets/e33a7006-d4b0-491b-813d-634fc00c0c90)
-
-### Thêm(Admin):
-
-![image](https://github.com/user-attachments/assets/ec95a06f-aaf0-427a-af2e-1c85eb2aab82)
+![image](https://github.com/user-attachments/assets/91b00ca6-9af8-4d8a-8786-23c5df904288)
 
 
-### Sửa, Xóa(Admin):
+### Trang để học:
 
-![image](https://github.com/user-attachments/assets/6faf5303-c149-484a-accb-f787257b8cb2)
+![image](https://github.com/user-attachments/assets/ced28208-cede-4940-b9a2-7a51eab10580)
 
-## Trang tư vấn - mua bán:
+### Lmà bài tập:
 
-### Giỏ hàng:
-
-![image](https://github.com/user-attachments/assets/515667a0-065a-4b92-95bc-251165659512)
-
-### Gửi yêu cầu tư vấn:
-
-![image](https://github.com/user-attachments/assets/f22e1416-c813-457d-bb7a-09d2a1ddcc17)
+![image](https://github.com/user-attachments/assets/e19df6bd-1d6f-4775-871f-21d8af014b72)
 
 
-## Trang đặt lịch dịch vụ:
+### Hiển thị kết quả:
 
-![image](https://github.com/user-attachments/assets/499b1b27-8c0e-4f2a-a001-78f95b684023)
+![image](https://github.com/user-attachments/assets/c78fb793-a9a7-4e35-aca1-8370dc0f9fb2)
 
-## Trang liên hệ:
-
-![image](https://github.com/user-attachments/assets/6ad952d6-04eb-4a38-9d13-7d1a4aef22cb)
-
-## Gửi yêu cầu tư vấn, đặt lịch, liên hệ về Gmail của người bán:
-
-### Đặt lịch:
-
-![Screenshot 2025-06-11 001931](https://github.com/user-attachments/assets/83fe3df9-2ce2-4ccc-b908-01877de1b19c)
-
-
-### Tư vấn:
-
-![Screenshot 2025-06-11 002040](https://github.com/user-attachments/assets/6bc556b5-6dd3-4806-bc48-0c6d1e48822e)
-
-
-### Liên hệ
-
-![Screenshot 2025-06-11 001910](https://github.com/user-attachments/assets/fe6cf771-f46a-4d64-8e2a-01f7084e399e)
-
+### Biểu đồ trạng thái:
+![image](https://github.com/user-attachments/assets/2cd5d924-93c9-4501-9e87-3fc607184017)
 
 # License & Copy Rights
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

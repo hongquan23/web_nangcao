@@ -13,14 +13,14 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
 # 3. Làm việc trong thư mục Laravel
 WORKDIR /var/www/html
 
-# 4. Copy toàn bộ project
+# 4. Copy toàn bộ project (trừ .env nếu bị gitignore)
 COPY . .
 
-# 5. Cài Composer dependencies (nếu cần)
+# 5. Cài Composer dependencies
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer install --no-dev --optimize-autoloader
 
-# ✅ 6. Đặt mirror npm và build frontend (Vite)
+# 6. Cài npm và build frontend (Vite)
 RUN npm config set registry https://registry.npmmirror.com \
     && npm install \
     && npm run build
@@ -32,9 +32,8 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /e
 RUN mkdir -p storage/framework/{sessions,views,cache} bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-# ✅ 9. Tạo .env từ biến môi trường nếu chưa có
-RUN [ ! -f .env ] && printenv | grep -v "no_proxy" > .env || true \
-    && php artisan config:cache \
+# 9. Cache config và generate key (nếu .env đã có)
+RUN php artisan config:cache || true \
     && php artisan key:generate || true
 
 EXPOSE 80

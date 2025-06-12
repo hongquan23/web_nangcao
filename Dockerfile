@@ -1,26 +1,38 @@
 FROM php:8.2-apache
 
-# Cài các gói hệ thống và PHP extension
+# 1. Cài system packages + PHP extension
 RUN apt-get update && apt-get install -y \
-    zip unzip git libzip-dev \
+    zip unzip git curl libzip-dev gnupg2 \
     && docker-php-ext-install pdo pdo_mysql zip \
     && a2enmod rewrite
 
-# Làm việc trong thư mục Laravel
+# 2. Cài Node.js 18 (hoặc LTS mới nhất)
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs
+
+# 3. Làm việc trong thư mục Laravel
 WORKDIR /var/www/html
 
-# Copy toàn bộ mã nguồn (bao gồm cả vendor/)
+# 4. Copy toàn bộ project
 COPY . .
 
-# Sửa DocumentRoot về public/
+# 5. Cài Composer dependencies (nếu cần)
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
+    && composer install --no-dev --optimize-autoloader
+
+# 6. Cài npm và build frontend (Vite)
+RUN npm install && npm run build
+
+# 7. Sửa Apache document root
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# Cấp quyền cho Laravel
+# 8. Cấp quyền Laravel
 RUN mkdir -p storage/framework/{sessions,views,cache} bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-# Copy .env nếu chưa có, generate key
+# 9. Tạo .env và key (nếu chưa có)
 RUN cp .env.example .env || true \
+    && php artisan config:cache \
     && php artisan key:generate || true
 
 EXPOSE 80

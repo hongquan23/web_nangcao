@@ -1,40 +1,50 @@
-FROM php:8.2-apache
+FROM php:8.2-apacheAdd commentMore actions
 
-# 1. Cài system packages + PHP extension
+# Cài các gói PHP cần thiết cho Laravel
 RUN apt-get update && apt-get install -y \
-    zip unzip git curl libzip-dev gnupg2 \
-    && docker-php-ext-install pdo pdo_mysql zip \
-    && a2enmod rewrite
+# 1. Cài Node.js + npm
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get update && apt-get install -y \
+    nodejs \
+    zip unzip git curl libzip-dev \
+    && docker-php-ext-install pdo pdo_mysql zip
 
-# 2. Cài Node.js 18 (hoặc LTS mới nhất)
-RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
-    && apt-get install -y nodejs
+# Bật mod_rewrite cho Laravel routing
+# 2. Bật mod_rewrite
+RUN a2enmod rewrite
 
-# 3. Làm việc trong thư mục Laravel
+# Set working directory
+# 3. Set working directory
 WORKDIR /var/www/html
 
-# 4. Copy toàn bộ project (trừ .env nếu bị gitignore)
+# Copy source vào container
+# 4. Copy source vào container
 COPY . .
 
-# 5. Cài Composer dependencies
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
-    && composer install --no-dev --optimize-autoloader
+# Thiết lập DocumentRoot về thư mục public
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+# 5. Build assets bằng Vite
+RUN npm install && npm run build
 
-# 6. Cài npm và build frontend (Vite)
-RUN npm config set registry https://registry.npmmirror.com \
-    && npm install \
-    && npm run build
-
-# 7. Sửa Apache document root
+# Cấu hình quyền cho storage và cache
+RUN mkdir -p storage/framework/{sessions,views,cache} bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+# 6. Thiết lập DocumentRoot về public/
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
 
-# 8. Cấp quyền Laravel
+# Cài composer nếu chưa có
+# 7. Cài Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+RUN composer install --no-dev --optimize-autoloader
+
+# Copy .env nếu chưa có và tạo APP_KEY
+# 8. Cấp quyền cho storage, cache
 RUN mkdir -p storage/framework/{sessions,views,cache} bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
-# 9. Cache config và generate key (nếu .env đã có)
-RUN php artisan config:cache || true \
-    && php artisan key:generate || true
+# 9. Tạo .env và key nếu cần
+RUN cp .env.example .env || true && php artisan key:generate || true
 
 EXPOSE 80
+
 CMD ["apache2-foreground"]

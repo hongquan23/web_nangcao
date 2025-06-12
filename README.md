@@ -28,22 +28,14 @@
 
 ## Sơ đồ chức năng
 
-![Screenshot 2025-06-10 231643](https://github.com/user-attachments/assets/8f3117d6-8729-4a63-99ad-458faf23adcc)
+![image](https://github.com/user-attachments/assets/2fd917dc-7e61-4e1c-88d8-7003d5e12b8e)
+
 
 
 ## Sơ đồ thuật toán
 
-Create Cart (user / car /user-car)
-Activity Diagram
+![image](https://github.com/user-attachments/assets/390a877f-701b-4619-a19b-ebccf24902ea)
 
-Edit Cart
-Activity Diagram
-
-Delete Cart
-
-Activity Diagram
-
-Authentication/Authorisation
 
 
 # Một số Code chính minh họa

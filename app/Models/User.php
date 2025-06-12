@@ -25,8 +25,7 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-
-    // Quan hệ với FlashcardSet (nếu có)
+// Quan hệ với FlashcardSet (nếu có)
     public function flashcardSets()
     {
         return $this->hasMany(FlashcardSet::class);

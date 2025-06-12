@@ -20,5 +20,10 @@ class FlashcardSet extends Model
     {
         return $this->hasMany(Flashcard::class);
     }
+
+    public function scores()
+{
+    return $this->hasMany(\App\Models\Score::class);
+}
 }
 

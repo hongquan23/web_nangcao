@@ -13,6 +13,10 @@ return new class extends Migration
     {
         Schema::create('scores', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('flashcard_set_id')->constrained()->onDelete('cascade');
+            $table->integer('total_questions');
+            $table->integer('correct_answers');
             $table->timestamps();
         });
     }

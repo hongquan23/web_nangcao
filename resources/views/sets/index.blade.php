@@ -3,65 +3,143 @@
 @section('title', 'Danh sách Bộ Flashcard')
 
 @section('content')
+
+<!-- Lordicon (nếu dùng) -->
+<script src="https://cdn.lordicon.com/lordicon.js"></script>
+
 <style>
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
     .flashcard-set {
         background: #f9fafb;
-        border-radius: 10px;
-        box-shadow: 0 3px 8px rgb(0 0 0 / 0.1);
-        padding: 16px 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 20px;
         margin-bottom: 20px;
         display: flex;
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
+        position: relative;
+        animation: fadeInUp 0.5s ease-in-out;
+        transition: box-shadow 0.3s ease;
     }
-    .flashcard-header {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        flex-wrap: wrap;
+
+    .flashcard-set:hover {
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
     }
+
+    .flashcard-set:nth-child(even) {
+        background-color: #f3f4f6;
+    }
+
+    .flashcard-left {
+        flex-grow: 1;
+        min-width: 250px;
+    }
+
     .flashcard-title {
-        font-size: 1.3rem;
+        font-size: 1.4rem;
         font-weight: 700;
         color: #1f2937;
-        margin: 0;
-        flex-grow: 1;
-        min-width: 200px;
+        margin-bottom: 6px;
+        transition: color 0.3s ease;
     }
-    .flashcard-actions a,
-    .flashcard-actions button {
-        margin-left: 10px;
-        padding: 6px 12px;
-        border-radius: 7px;
+
+    .flashcard-title:hover {
+        color: #4f46e5;
+    }
+
+    .flashcard-desc {
+        font-size: 1rem;
+        color: #6b7280;
+        margin-bottom: 4px;
+    }
+
+    .flashcard-meta {
+        font-size: 0.9rem;
+        color: #6b7280;
+    }
+
+    .dropdown-button {
+        background-color: #4b5563;
+        color: white;
+        padding: 8px 14px;
+        border-radius: 8px;
         font-weight: 600;
-        text-decoration: none;
+        font-size: 0.9rem;
         border: none;
         cursor: pointer;
-        font-size: 0.9rem;
         transition: background-color 0.3s ease;
     }
-    .flashcard-actions a.view {
-        background-color: #3b82f6; /* blue */
-        color: white;
+
+    .dropdown-button:hover {
+        background-color: #374151;
     }
-    .flashcard-actions a.view:hover {
-        background-color: #2563eb;
+
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 110%;
+        right: 0;
+        background: white;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        overflow: hidden;
+        z-index: 10;
+        min-width: 180px;
+        opacity: 0;
+        transform: scale(0.95);
+        transition: all 0.3s ease;
     }
-    .flashcard-actions a.edit {
-        background-color: #f59e0b; /* amber */
-        color: white;
+
+    .dropdown-menu.show {
+        display: block;
+        opacity: 1;
+        transform: scale(1);
     }
-    .flashcard-actions a.edit:hover {
-        background-color: #b45309;
+
+    .dropdown-item {
+        display: block;
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        text-decoration: none;
+        color: #1f2937;
+        background-color: white;
+        transition: background-color 0.2s ease;
+        border-bottom: 1px solid #e5e7eb;
     }
-    .flashcard-actions button.delete {
-        background-color: #ef4444; /* red */
-        color: white;
+
+    .dropdown-item:last-child {
+        border-bottom: none;
     }
-    .flashcard-actions button.delete:hover {
-        background-color: #b91c1c;
+
+    .dropdown-item:hover {
+        background-color: #f3f4f6;
+    }
+
+    .dropdown-item form {
+        margin: 0;
+    }
+
+    .dropdown-item button {
+        background: none;
+        border: none;
+        padding: 0;
+        width: 100%;
+        text-align: left;
+        font: inherit;
+        color: inherit;
+        cursor: pointer;
     }
 </style>
 
@@ -78,17 +156,40 @@
 @if($sets->count() > 0)
     @foreach($sets as $set)
         <div class="flashcard-set">
-            <div class="flashcard-header">
+            <div class="flashcard-left">
                 <h2 class="flashcard-title">{{ $set->title }}</h2>
-                <div class="flashcard-actions">
-                    <a href="{{ route('flashcards.index', $set->id) }}" class="view">🔍 Xem</a>
-                    <a href="{{ route('sets.edit', $set->id) }}" class="edit">✏️ Sửa</a>
-                    <form action="{{ route('sets.destroy', $set->id) }}" method="POST"
-                          onsubmit="return confirm('Bạn có chắc muốn xoá bộ này?');" style="display: inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="delete">🗑️ Xoá</button>
-                    </form>
+                @if($set->description)
+                    <p class="flashcard-desc">{{ $set->description }}</p>
+                @endif
+                <p class="flashcard-meta">
+                    📄 {{ $set->flashcards_count }} từ vựng •
+                    🧠 {{ number_format($set->avg_review, 1) }} lần ôn •
+                    ✅ TB {{ number_format($set->avg_score, 0) }}%
+                </p>
+            </div>
+
+            <div class="flashcard-actions" style="position: relative;">
+                <button class="dropdown-button" onclick="toggleMenu(this)">⚙️ Tùy chọn</button>
+                <div class="dropdown-menu">
+                    <a href="{{ route('flashcards.index', $set->id) }}" class="dropdown-item">🔍 Học</a>
+                    <a href="{{ route('sets.edit', $set->id) }}" class="dropdown-item">✏️ Sửa</a>
+                    <a href="{{ route('sets.showWriting', $set->id) }}" class="dropdown-item">✍️ Làm bài tập</a>
+                    <a href="{{ route('sets.chart', $set->id) }}" class="dropdown-item">
+                        <lord-icon
+                            src="https://cdn.lordicon.com/abwrkdvl.json"
+                            trigger="hover"
+                            style="width:20px;height:20px;display:inline-block;vertical-align:middle;margin-right:6px;">
+                        </lord-icon>
+                        Biểu đồ học
+                    </a>
+                    <div class="dropdown-item">
+                        <form action="{{ route('sets.destroy', $set->id) }}" method="POST"
+                              onsubmit="return confirm('Bạn có chắc muốn xoá bộ này?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit">🗑️ Xoá</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
@@ -98,4 +199,25 @@
         😕 Chưa có bộ flashcard nào. Hãy bắt đầu bằng cách tạo bộ mới!
     </div>
 @endif
+
+<script>
+    function toggleMenu(button) {
+        const menu = button.nextElementSibling;
+        const isOpen = menu.classList.contains('show');
+
+        // Đóng tất cả menu khác
+        document.querySelectorAll('.dropdown-menu').forEach(m => m.classList.remove('show'));
+
+        if (!isOpen) menu.classList.add('show');
+    }
+
+    document.addEventListener('click', function (event) {
+        document.querySelectorAll('.dropdown-menu').forEach(menu => {
+            if (!menu.contains(event.target) && !menu.previousElementSibling.contains(event.target)) {
+                menu.classList.remove('show');
+            }
+        });
+    });
+</script>
+
 @endsection

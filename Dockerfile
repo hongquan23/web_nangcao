@@ -20,8 +20,10 @@ COPY . .
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
     && composer install --no-dev --optimize-autoloader
 
-# 6. Cài npm và build frontend (Vite)
-RUN npm install && npm run build
+# ✅ 6. Đặt mirror npm trước khi cài để tránh lỗi 503
+RUN npm config set registry https://registry.npmmirror.com \
+    && npm install \
+    && npm run build
 
 # 7. Sửa Apache document root
 RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf

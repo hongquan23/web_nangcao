@@ -1,50 +1,33 @@
-FROM php:8.2-apacheAdd commentMore actions
+# Base image: PHP 8.3 + Apache
+FROM php:8.3-apache
 
-# Cài các gói PHP cần thiết cho Laravel
+# Cài tiện ích & extension PHP cần thiết
 RUN apt-get update && apt-get install -y \
-# 1. Cài Node.js + npm
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get update && apt-get install -y \
-    nodejs \
-    zip unzip git curl libzip-dev \
-    && docker-php-ext-install pdo pdo_mysql zip
+    git unzip zip curl libzip-dev libpng-dev libjpeg-dev libfreetype6-dev libonig-dev libxml2-dev libicu-dev \
+    && docker-php-ext-install pdo pdo_mysql zip mbstring exif pcntl bcmath intl
 
-# Bật mod_rewrite cho Laravel routing
-# 2. Bật mod_rewrite
+# Bật rewrite module cho Laravel (Apache)
 RUN a2enmod rewrite
 
-# Set working directory
-# 3. Set working directory
+# Cài Composer từ image chính thức
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# Thiết lập thư mục làm việc
 WORKDIR /var/www/html
 
-# Copy source vào container
-# 4. Copy source vào container
+# Copy toàn bộ mã nguồn Laravel vào container
 COPY . .
 
-# Thiết lập DocumentRoot về thư mục public
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
-# 5. Build assets bằng Vite
-RUN npm install && npm run build
-
-# Cấu hình quyền cho storage và cache
-RUN mkdir -p storage/framework/{sessions,views,cache} bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
-# 6. Thiết lập DocumentRoot về public/
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
-
-# Cài composer nếu chưa có
-# 7. Cài Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+# Cài dependency Laravel (nên kiểm tra composer.lock nếu có)
 RUN composer install --no-dev --optimize-autoloader
 
-# Copy .env nếu chưa có và tạo APP_KEY
-# 8. Cấp quyền cho storage, cache
-RUN mkdir -p storage/framework/{sessions,views,cache} bootstrap/cache \
-    && chown -R www-data:www-data storage bootstrap/cache
+# Tạo thư mục cache nếu chưa có & cấp quyền
+RUN mkdir -p storage/framework/{cache,sessions,views} && \
+    mkdir -p bootstrap/cache && \
+    chown -R www-data:www-data storage bootstrap/cache
 
-# 9. Tạo .env và key nếu cần
-RUN cp .env.example .env || true && php artisan key:generate || true
-
+# Expose cổng 80
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+# Lệnh khởi động chính
+CMD php artisan config:cache && php artisan migrate --force && apache2-foreground

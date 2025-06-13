@@ -17,7 +17,7 @@ services:
       - key: APP_DEBUG
         value: false
       - key: APP_URL
-        value: https://your-app-name.onrender.com
+        value: https://web-nangcao-1.onrender.com/
 
       - key: APP_LOCALE
         value: en

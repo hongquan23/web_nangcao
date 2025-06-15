@@ -109,11 +109,11 @@ blade template Cart
 
 # Link
 
-## Github Profile : 
+## Github Profile : https://github.com/hongquan23/web_nangcao
 
 ## Link Demo : 
 
-## Public Web (deployment) link: 
+## Public Web (deployment) link: https://web-nangcao-1.onrender.com
 
 # Một số hình ảnh chức năng chính
 

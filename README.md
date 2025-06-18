@@ -106,12 +106,25 @@ blade template Cart
 
 
 # Security Setup
+## Sử dụng @CSRF Token để bảo vệ chống tấn công giả mạo yêu cầu từ phía người dùng
+![image](https://github.com/user-attachments/assets/36ea0384-faed-4668-9d8d-979eae9fa663)
+
+## Chống XSS
+![image](https://github.com/user-attachments/assets/5953f975-5b9d-4416-bc88-de181f85424d)
+## Middleware(dấu ->) bảo vệ chuyển hướng
+![image](https://github.com/user-attachments/assets/67a81e84-5723-41e5-b8fa-5052420a92dc)
+## Sử dụng Eloquent ORM chống SQL Injection
+![image](https://github.com/user-attachments/assets/396405eb-9144-4582-8e46-c121fdaf9136)
+< UPDATE flashcards SET term = 'New term', definition = 'New definition' WHERE flashcards.set_id = ?; >
+
+
+
+
+
 
 # Link
 
 ## Github Profile : https://github.com/hongquan23/web_nangcao
-
-## Link Demo : 
 
 ## Public Web (deployment) link: https://web-nangcao-1.onrender.com
 

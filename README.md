@@ -6,7 +6,7 @@
 3. Lớp: K17_CNTT-5
 4. Môn học: Web nâng cao (TH3)
 
-# 📋 Mô tả nội dự án:
+# 📋 Mô tả dự án:
 
 #### Dự án website học từ vựng tiếng Anh thông qua flashcard, hỗ trợ người dùng ghi nhớ từ vựng hiệu quả bằng các bộ thẻ học đơn giản, dễ sử dụng. Trang web cung cấp các chế độ học, kiểm tra và theo dõi tiến độ, giúp người học nâng cao vốn từ một cách khoa học và chủ động.
 
